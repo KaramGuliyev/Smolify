@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Home from "./components/LandingPage";
-import Account from "./components/Account";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./Pages/LandingPage";
+import Account from "./Pages/Account";
 import NavBar from "./Layouts/NavBar";
 import "./index.css";
 
