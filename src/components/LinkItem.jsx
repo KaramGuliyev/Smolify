@@ -7,10 +7,9 @@ const LinkItem = ({ LinkArray }) => {
     <>
       {LinkArray.map((linkItem, i) => {
         const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
-
         return (
-          <>
-            <Box display={"flex"} justifyContent={"space-between"} key={i}>
+          <Box key={i}>
+            <Box display={"flex"} justifyContent={"space-between"}>
               <Box>
                 <DateComponent dateDetails={createdAt} />
                 <Box my={2}>
@@ -43,7 +42,7 @@ const LinkItem = ({ LinkArray }) => {
                 <Divider />
               </Box>
             )}
-          </>
+          </Box>
         );
       })}
     </>

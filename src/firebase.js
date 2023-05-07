@@ -18,11 +18,9 @@ const firestore = firebase.firestore();
 const auth = getAuth();
 
 async function SignUp(email, password) {
-  console.log(process.env.API_KEY);
   await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       const user = userCredential.user;
-      console.log(user);
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -32,4 +30,4 @@ async function SignUp(email, password) {
   console.log(auth.currentUser);
 }
 
-export { firebase, firestore, SignUp };
+export { firebase, firestore, auth, SignUp };
