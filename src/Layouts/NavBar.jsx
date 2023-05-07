@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const NavBar = ({ children }) => {
   return (
     <>
-      <AppBar position="static">
+      <AppBar elevation={1} position="static" color="secondary">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link to="/">Smolify</Link>

@@ -1,38 +1,49 @@
-import { Typography, Button, Box } from "@mui/material";
+import { Typography, Button, Box, Divider } from "@mui/material";
 import { BarChart } from "@mui/icons-material";
+import DateComponent from "./Date";
 
 const LinkItem = ({ LinkArray }) => {
-  console.log(LinkArray);
   return (
     <>
       {LinkArray.map((linkItem, i) => {
         const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
 
-        console.log(id, createdAt, name, longUrl, shortCode, totalClicks);
-
         return (
-          <Box display={"flex"} justifyContent={"space-between"} key={i}>
-            <Box>
-              <Typography>Created At : {`${createdAt}`}</Typography>
-              <Typography variant="h5">{name}</Typography>
-              <Typography>{longUrl}</Typography>
+          <>
+            <Box display={"flex"} justifyContent={"space-between"} key={i}>
               <Box>
-                <Typography>{window.location.host + "/" + shortCode}</Typography>
-                <Button size="small" variant="outlined">
-                  Copy
-                </Button>
-              </Box>
-            </Box>
-            <Box>
-              <Box>
-                <Box display={"flex"}>
-                  <Typography>{totalClicks}</Typography>
-                  <BarChart></BarChart>
+                <DateComponent dateDetails={createdAt} />
+                <Box my={2}>
+                  <Typography variant="h5">{name}</Typography>
+                  <Typography>{longUrl}</Typography>
                 </Box>
-                <Typography>Total Clicks</Typography>
+                <Box display={"flex"} alignItems="center">
+                  <Typography mr={3} color="primary">
+                    {window.location.host + "/" + shortCode}
+                  </Typography>
+                  <Button size="small" variant="outlined">
+                    Copy
+                  </Button>
+                </Box>
+              </Box>
+              <Box display={"flex"} flexDirection={"column"} alignSelf={"center"}>
+                <Box>
+                  <Box display={"flex"} justifyContent={"center"}>
+                    <Typography>{totalClicks}</Typography>
+                    <BarChart></BarChart>
+                  </Box>
+                  <Typography variant="overline" color="textSecondary">
+                    Total Clicks
+                  </Typography>
+                </Box>
               </Box>
             </Box>
-          </Box>
+            {i !== LinkArray.length - 1 && (
+              <Box my={4}>
+                <Divider />
+              </Box>
+            )}
+          </>
         );
       })}
     </>
