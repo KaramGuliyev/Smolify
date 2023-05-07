@@ -7,6 +7,7 @@ const Home = () => {
     email: "",
     password: "",
   });
+  
   const handleChange = (e) => setForm((oldForm) => ({ ...oldForm, [e.target.name]: e.target.value }));
 
   const handleSignUp = () => {

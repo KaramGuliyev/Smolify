@@ -1,6 +1,7 @@
 import app from "firebase/compat/app";
 import "firebase/compat/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, useAuthEmulator } from "firebase/auth";
+import { connectAuthEmulator } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -16,6 +17,11 @@ console.log(firebaseConfig);
 const firebase = app.initializeApp(firebaseConfig);
 const firestore = firebase.firestore();
 const auth = getAuth();
+
+if (process.env.NODE_ENV === "development") {
+firestore.useEmulator("localhost", 8080);
+  connectAuthEmulator(auth, "http://localhost:9099");
+}
 
 async function SignUp(email, password) {
   await createUserWithEmailAndPassword(auth, email, password)

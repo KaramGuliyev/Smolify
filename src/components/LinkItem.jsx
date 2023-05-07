@@ -16,12 +16,13 @@ const LinkItem = ({ LinkArray }) => {
                   <Typography variant="h5">{name}</Typography>
                   <Typography>{longUrl}</Typography>
                 </Box>
-                <Box display={"flex"} alignItems="center">
-                  <Typography mr={3} color="primary">
-                    {window.location.host + "/" + shortCode}
-                  </Typography>
+                <Box display={"flex"} gap={3} alignItems="center">
+                  <Typography color="primary">{window.location.host + "/" + shortCode}</Typography>
                   <Button size="small" variant="outlined">
                     Copy
+                  </Button>
+                  <Button size="small" variant="contained" color="secondary">
+                    Delete
                   </Button>
                 </Box>
               </Box>
