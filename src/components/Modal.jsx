@@ -11,6 +11,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { nanoid } from "nanoid";
+import { app, firestore, auth } from "../firebase.js";
 
 const Modal = ({ setIsOpen }) => {
   const [form, setForm] = useState({
@@ -19,6 +21,19 @@ const Modal = ({ setIsOpen }) => {
   });
 
   const handleChange = (e) => setForm((oldForm) => ({ ...oldForm, [e.target.name]: e.target.value }));
+
+  const handleSmolifyURL = async (name, URL) => {
+    const link = {
+      name: name,
+      longUrl: URL,
+      createdAt: app.firestore.FieldValue.serverTimestamp(),
+      shortCode: nanoid(5),
+      totalClicks: 0,
+    };
+    const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
+    console.log(res);
+    setIsOpen(false);
+  };
 
   return (
     <Dialog fullWidth onClose={() => setIsOpen(false)} open={true}>
@@ -47,7 +62,12 @@ const Modal = ({ setIsOpen }) => {
       </DialogContent>
       <DialogActions>
         <Box mr={2} mb={2}>
-          <Button onClick={() => console.log(form)} variant="contained" color="primary" disableElevation>
+          <Button
+            onClick={() => handleSmolifyURL(form.name, form.longUrl)}
+            variant="contained"
+            color="primary"
+            disableElevation
+          >
             Smolify URL
           </Button>
         </Box>

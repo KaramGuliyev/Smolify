@@ -1,6 +1,6 @@
 import app from "firebase/compat/app";
 import "firebase/compat/firestore";
-import { getAuth, createUserWithEmailAndPassword, useAuthEmulator } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { connectAuthEmulator } from "firebase/auth";
 
 const firebaseConfig = {
@@ -19,7 +19,7 @@ const firestore = firebase.firestore();
 const auth = getAuth();
 
 if (process.env.NODE_ENV === "development") {
-firestore.useEmulator("localhost", 8080);
+  firestore.useEmulator("localhost", 8080);
   connectAuthEmulator(auth, "http://localhost:9099");
 }
 
@@ -36,4 +36,4 @@ async function SignUp(email, password) {
   console.log(auth.currentUser);
 }
 
-export { firebase, firestore, auth, SignUp };
+export { app, firebase, firestore, auth, SignUp };
