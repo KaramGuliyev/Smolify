@@ -22,7 +22,7 @@ const Account = () => {
   useEffect(() => {
     console.log(auth.currentUser);
     fetchLinks();
-  },[]);
+  }, []);
 
   useEffect(() => {
     if (isOpen === false) {
@@ -60,7 +60,8 @@ const Account = () => {
                 </Button>
               </Box>
             </Box>
-            {links[0] === undefined ? noLinks : <LinkItem LinkArray={links} />}
+            {links[0] === undefined ? noLinks : <LinkItem LinkArray={links} setLinkArray={setLinks} />}
+            {/* <LinkItem LinkArray={links} setLinkArray={setLinks} /> */}
           </Grid>
         </Grid>
       </Box>

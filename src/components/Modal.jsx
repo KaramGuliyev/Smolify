@@ -34,6 +34,8 @@ const Modal = ({ setIsOpen, fetchLink }) => {
     setIsOpen(false);
   };
 
+
+
   return (
     <Dialog fullWidth onClose={() => setIsOpen(false)} open={true}>
       <DialogTitle>

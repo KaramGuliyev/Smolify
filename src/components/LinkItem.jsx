@@ -1,11 +1,19 @@
 import { Typography, Button, Box, Divider } from "@mui/material";
 import { BarChart } from "@mui/icons-material";
 import DateComponent from "./Date";
+import { auth, firestore } from "../firebase";
 
-const LinkItem = ({ LinkArray }) => {
+const LinkItem = ({ LinkArray, setLinkArray }) => {
+  const deleteLink = async (linkDocId) => {
+    await firestore.collection("users").doc(auth.currentUser.uid).collection("links").doc(linkDocId).delete();
+    const snapshot = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").get();
+    const links = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() }));
+    setLinkArray(links);
+  };
+
   return (
     <>
-      {LinkArray.sort((prev,next)=> next.createdAt - prev.createdAt).map((linkItem, i) => {
+      {LinkArray.sort((prev, next) => next.createdAt - prev.createdAt).map((linkItem, i) => {
         const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
         return (
           <Box key={i} mb={i === LinkArray.length - 1 ? 8 : 0}>
@@ -21,7 +29,7 @@ const LinkItem = ({ LinkArray }) => {
                   <Button size="small" variant="outlined">
                     Copy
                   </Button>
-                  <Button size="small" variant="contained" color="secondary">
+                  <Button onClick={() => deleteLink(linkItem.id)} size="small" variant="contained" color="secondary">
                     Delete
                   </Button>
                 </Box>
