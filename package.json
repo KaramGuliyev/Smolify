@@ -22,7 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "fb": "firebase emulators:start --import ./firebase-export --export-on-exit ./firebase-export"
   },
   "eslintConfig": {
     "extends": [

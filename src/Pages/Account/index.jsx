@@ -1,11 +1,11 @@
-import { Box, Button, CircularProgress, Grid, LinearProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import LinkItem from "../../components/LinkItem";
 import Modal from "../../components/Modal";
 import { auth, firestore } from "../../firebase";
 
 const Account = () => {
-  const [links, setLinks] = useState([]);
+  const [links, setLinks] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -13,7 +13,6 @@ const Account = () => {
     const snapshot = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").get();
     const tempArr = [];
     snapshot.forEach((doc) => tempArr.push({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() }));
-    console.log(tempArr);
     setLinks(tempArr);
     if (loading) {
       setLoading(false);
@@ -21,8 +20,9 @@ const Account = () => {
   };
 
   useEffect(() => {
+    console.log(auth.currentUser);
     fetchLinks();
-  }, []);
+  },[]);
 
   useEffect(() => {
     if (isOpen === false) {
@@ -38,6 +38,14 @@ const Account = () => {
     );
   }
 
+  const noLinks = (
+    <Box mt={5} display={"flex"} flexDirection={"row"} flexWrap={"nowrap"} justifyContent={"center"}>
+      <Typography color="primary" variant="h5" mx={1}>
+        Create Smolify Link!
+      </Typography>
+    </Box>
+  );
+
   return (
     <>
       <Box mt={5}>
@@ -52,7 +60,7 @@ const Account = () => {
                 </Button>
               </Box>
             </Box>
-            <LinkItem LinkArray={links} />
+            {links[0] === undefined ? noLinks : <LinkItem LinkArray={links} />}
           </Grid>
         </Grid>
       </Box>
