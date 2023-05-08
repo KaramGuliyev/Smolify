@@ -14,7 +14,7 @@ import React, { useState } from "react";
 import { nanoid } from "nanoid";
 import { app, firestore, auth } from "../firebase.js";
 
-const Modal = ({ setIsOpen }) => {
+const Modal = ({ setIsOpen, fetchLink }) => {
   const [form, setForm] = useState({
     name: "",
     longUrl: "",
@@ -31,7 +31,6 @@ const Modal = ({ setIsOpen }) => {
       totalClicks: 0,
     };
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
-    console.log(res);
     setIsOpen(false);
   };
 

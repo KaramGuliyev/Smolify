@@ -5,10 +5,10 @@ import DateComponent from "./Date";
 const LinkItem = ({ LinkArray }) => {
   return (
     <>
-      {LinkArray.map((linkItem, i) => {
+      {LinkArray.sort((prev,next)=> next.createdAt - prev.createdAt).map((linkItem, i) => {
         const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
         return (
-          <Box key={i}>
+          <Box key={i} mb={i === LinkArray.length - 1 ? 8 : 0}>
             <Box display={"flex"} justifyContent={"space-between"}>
               <Box>
                 <DateComponent dateDetails={createdAt} />
