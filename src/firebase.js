@@ -1,6 +1,6 @@
 import app from "firebase/compat/app";
 import "firebase/compat/firestore";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { connectAuthEmulator } from "firebase/auth";
 
 const firebaseConfig = {
@@ -31,7 +31,18 @@ async function SignUp(email, password) {
       const errorMessage = error.message;
       console.log(errorCode + errorMessage);
     });
-  console.log(auth.currentUser);
 }
 
-export { app, firebase, firestore, auth, SignUp };
+async function SignIn(email, password) {
+  await signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const user = userCredential.user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorCode + errorMessage);
+    });
+}
+
+export { app, firebase, firestore, auth, SignUp, SignIn };
