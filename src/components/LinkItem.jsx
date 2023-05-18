@@ -2,14 +2,18 @@ import { Typography, Button, Box, Divider } from "@mui/material";
 import { BarChart } from "@mui/icons-material";
 import DateComponent from "./Date";
 import { auth, firestore } from "../firebase";
+import { memo, useCallback } from "react";
 
 const LinkItem = ({ LinkArray, setLinkArray }) => {
-  const deleteLink = async (linkDocId) => {
-    await firestore.collection("users").doc(auth.currentUser.uid).collection("links").doc(linkDocId).delete();
-    const snapshot = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").get();
-    const links = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() }));
-    setLinkArray(links);
-  };
+  const deleteLink = useCallback(
+    async (linkDocId) => {
+      await firestore.collection("users").doc(auth.currentUser.uid).collection("links").doc(linkDocId).delete();
+      const snapshot = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").get();
+      const links = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() }));
+      setLinkArray(links);
+    },
+    [setLinkArray]
+  );
 
   return (
     <>
@@ -29,7 +33,7 @@ const LinkItem = ({ LinkArray, setLinkArray }) => {
                   <Button size="small" variant="outlined">
                     Copy
                   </Button>
-                  <Button onClick={() => deleteLink(linkItem.id)} size="small" variant="contained" color="secondary">
+                  <Button onClick={() => deleteLink(id)} size="small" variant="contained" color="secondary">
                     Delete
                   </Button>
                 </Box>
@@ -58,4 +62,4 @@ const LinkItem = ({ LinkArray, setLinkArray }) => {
   );
 };
 
-export default LinkItem;
+export default memo(LinkItem);

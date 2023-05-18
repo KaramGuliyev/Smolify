@@ -5,11 +5,12 @@ import Modal from "../../components/Modal";
 import { auth, firestore } from "../../firebase";
 
 const Account = () => {
-  const [links, setLinks] = useState(null);
+  const [links, setLinks] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const fetchLinks = async () => {
+    setLoading(true);
     const snapshot = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").get();
     const tempArr = [];
     snapshot.forEach((doc) => tempArr.push({ ...doc.data(), id: doc.id, createdAt: doc.data().createdAt.toDate() }));
@@ -20,13 +21,16 @@ const Account = () => {
   };
 
   useEffect(() => {
-    console.log(auth.currentUser);
+    setLoading(true)
     fetchLinks();
+    setLoading(false)
   }, []);
 
   useEffect(() => {
     if (isOpen === false) {
+      setLoading(true);
       fetchLinks();
+      setLoading(false);
     }
   }, [isOpen]);
 
@@ -60,8 +64,7 @@ const Account = () => {
                 </Button>
               </Box>
             </Box>
-            {links[0] === undefined ? noLinks : <LinkItem LinkArray={links} setLinkArray={setLinks} />}
-            {/* <LinkItem LinkArray={links} setLinkArray={setLinks} /> */}
+            {links === [] ? noLinks : <LinkItem LinkArray={links} setLinkArray={setLinks} />}
           </Grid>
         </Grid>
       </Box>
