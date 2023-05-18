@@ -1,4 +1,4 @@
-import { Close } from "@mui/icons-material";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import { Close } from "@mui/icons-material";
 import { nanoid } from "nanoid";
 import { app, firestore, auth } from "../firebase.js";
 
@@ -20,12 +20,15 @@ const Modal = ({ setIsOpen, fetchLink }) => {
     longUrl: "",
   });
 
-  const handleChange = (e) => setForm((oldForm) => ({ ...oldForm, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
+  };
 
-  const handleSmolifyURL = async (name, URL) => {
+  const handleSmolifyURL = async (name, longUrl) => {
     const link = {
-      name: name,
-      longUrl: URL,
+      name,
+      longUrl,
       createdAt: app.firestore.FieldValue.serverTimestamp(),
       shortCode: nanoid(5),
       totalClicks: 0,
@@ -33,8 +36,6 @@ const Modal = ({ setIsOpen, fetchLink }) => {
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
     setIsOpen(false);
   };
-
-
 
   return (
     <Dialog fullWidth onClose={() => setIsOpen(false)} open={true}>
@@ -47,7 +48,7 @@ const Modal = ({ setIsOpen, fetchLink }) => {
         </Box>
       </DialogTitle>
       <DialogContent>
-        <Box display={"flex"} flexDirection={"column"}>
+        <Box display="flex" flexDirection="column">
           <Box my={3}>
             <TextField value={form.name} name="name" onChange={handleChange} fullWidth variant="outlined" label="Name" />
           </Box>

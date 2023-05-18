@@ -1,19 +1,24 @@
+// React
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+
+// Stylings
+import { ThemeProvider } from "@emotion/react";
+import { Box, CircularProgress } from "@mui/material";
+import theme from "./theme";
+import "./index.css";
+
+// Firebase
+import { auth } from "./firebase";
+
+// Pages
 import Home from "./Pages/LandingPage";
 import Account from "./Pages/Account";
 import NavBar from "./Layouts/NavBar";
 
-import { ThemeProvider } from "@emotion/react";
-import theme from "./theme";
-
-import "./index.css";
-import { auth } from "./firebase";
-import { useEffect, useState } from "react";
-import { Box, CircularProgress } from "@mui/material";
-
 const App = () => {
   const [user, setUser] = useState(null);
-  const [initalLoad, setInitialLoad] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -22,12 +27,13 @@ const App = () => {
     });
   }, []);
 
-  if (initalLoad)
+  if (initialLoad) {
     return (
-      <Box mt={5} display={"flex"} justifyContent={"center"}>
+      <Box mt={5} display="flex" justifyContent="center">
         <CircularProgress />
       </Box>
     );
+  }
 
   return (
     <ThemeProvider theme={theme}>
