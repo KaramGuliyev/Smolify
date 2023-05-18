@@ -22,4 +22,3 @@ export default createTheme({
   },
 });
 
-// secondary: ''

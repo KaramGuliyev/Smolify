@@ -1,5 +1,5 @@
-import { Typography } from "@mui/material";
 import React from "react";
+import { Typography } from "@mui/material";
 
 const DateComponent = ({ dateDetails }) => {
   const months = [
@@ -30,7 +30,7 @@ const DateComponent = ({ dateDetails }) => {
   if (hour < 10) {
     hour = `0${hour}`;
   }
-  
+
   if (minute === 0) {
     minute = `00`;
   } else if (minute < 10) {
@@ -38,7 +38,11 @@ const DateComponent = ({ dateDetails }) => {
   }
   const longDate = ` ${day} ${month} ${year}, ${hour}:${minute}`;
 
-  return <Typography variant="overline" color="textSecondary"> {`Created At : ${longDate}`}</Typography>;
+  return (
+    <Typography variant="overline" color="textSecondary">
+      Created At : {longDate}
+    </Typography>
+  );
 };
 
 export default DateComponent;

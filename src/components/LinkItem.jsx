@@ -1,8 +1,9 @@
+import React, { useCallback } from "react";
 import { Typography, Button, Box, Divider } from "@mui/material";
 import { BarChart } from "@mui/icons-material";
 import DateComponent from "./Date";
 import { auth, firestore } from "../firebase";
-import { memo, useCallback } from "react";
+import { memo } from "react";
 
 const LinkItem = ({ LinkArray, setLinkArray }) => {
   const deleteLink = useCallback(
@@ -21,14 +22,14 @@ const LinkItem = ({ LinkArray, setLinkArray }) => {
         const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
         return (
           <Box key={i} mb={i === LinkArray.length - 1 ? 8 : 0}>
-            <Box display={"flex"} justifyContent={"space-between"}>
+            <Box display="flex" justifyContent="space-between">
               <Box>
                 <DateComponent dateDetails={createdAt} />
                 <Box my={2}>
                   <Typography variant="h5">{name}</Typography>
                   <Typography>{longUrl}</Typography>
                 </Box>
-                <Box display={"flex"} gap={3} alignItems="center">
+                <Box display="flex" gap={3} alignItems="center">
                   <Typography color="primary">{window.location.host + "/" + shortCode}</Typography>
                   <Button size="small" variant="outlined">
                     Copy
@@ -38,11 +39,11 @@ const LinkItem = ({ LinkArray, setLinkArray }) => {
                   </Button>
                 </Box>
               </Box>
-              <Box display={"flex"} flexDirection={"column"} alignSelf={"center"}>
+              <Box display="flex" flexDirection="column" alignSelf="center">
                 <Box>
-                  <Box display={"flex"} justifyContent={"center"}>
+                  <Box display="flex" justifyContent="center">
                     <Typography>{totalClicks}</Typography>
-                    <BarChart></BarChart>
+                    <BarChart />
                   </Box>
                   <Typography variant="overline" color="textSecondary">
                     Total Clicks
