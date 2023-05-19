@@ -20,12 +20,12 @@ import LinkRedirect from "./Pages/LinkRedirect";
 const App = () => {
   const { pathname } = useLocation();
   const [user, setUser] = useState(null);
-  const [initialLoad, setInitialLoad] = useState(pathname === "/" || pathname === "/account" ? false : true);
+  const [initialLoad, setInitialLoad] = useState(pathname === "/" || pathname === "/account" ? true : false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUser(user);
-      setInitialLoad(false);
+        setInitialLoad(false);
     });
   }, []);
 
@@ -41,7 +41,7 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <NavBar>
         <Routes>
-          <Route path="/" element={user ? <Navigate to="/account" /> : <Home />} />
+          <Route exact path="/" element={user ? <Navigate to="/account" /> : <Home />} />
           <Route path="/account" element={!user ? <Navigate to="/" /> : <Account />} />
           <Route path="/:shortCode" Component={LinkRedirect} />
         </Routes>

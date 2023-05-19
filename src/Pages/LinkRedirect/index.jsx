@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { firestore } from "../../firebase";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 const LinkRedirect = () => {
   const { shortCode } = useParams();
@@ -13,8 +13,10 @@ const LinkRedirect = () => {
       setTimeout(() => {
         if (linkDoc.exists) {
           const { longUrl } = linkDoc.data();
-          window.location.href = `https://${longUrl}`;
+          window.location.href = `http://${longUrl}`;
+        } else {
           setLoading(false);
+          window.location.href = `http://${window.location.host}/`;
         }
       }, 2000);
     };
@@ -23,11 +25,21 @@ const LinkRedirect = () => {
 
   if (loading) {
     return (
-      <Box mt={10}>
-        <CircularProgress />;
+      <Box mt={10} textAlign="center">
+        <CircularProgress />
+        <Typography>Redirecting...</Typography>
       </Box>
     );
-  }
+  } else
+    return (
+      <Box mt={10} textAlign="center">
+        <Typography variant="h3">Link is invalid</Typography>
+        <Typography mt={5}>Redirecting to Home Page</Typography>
+        <Box mt={3}>
+          <CircularProgress />
+        </Box>
+      </Box>
+    );
 };
 
 export default LinkRedirect;
