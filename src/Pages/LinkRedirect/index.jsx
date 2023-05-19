@@ -10,16 +10,16 @@ const LinkRedirect = () => {
   useEffect(() => {
     const fetchLinksDoc = async () => {
       const linkDoc = await firestore.collection("links").doc(shortCode).get();
+      const { longUrl, linkID, userUid } = linkDoc.data();
       setTimeout(() => {
         if (linkDoc.exists) {
-          const { longUrl, linkID, userUid } = linkDoc.data();
           firestore.collection('users').doc(userUid).collection("links").doc(linkID).update({
             totalClicks : app.firestore.FieldValue.increment(1)
           })
-          window.location.href = `http://${longUrl}`;
+          window.location.href = longUrl;
         } else {
           setLoading(false);
-          window.location.href = `http://${window.location.host}/`;
+          window.location.href = longUrl;
         }
       }, 2000);
     };
