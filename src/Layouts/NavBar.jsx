@@ -1,5 +1,8 @@
 import { Typography, AppBar, Toolbar, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import { auth } from "../firebase";
+
+
 
 const NavBar = ({ children }) => {
   return (
@@ -12,7 +15,7 @@ const NavBar = ({ children }) => {
           <Button color="inherit">
             <Link to="/account">My Account</Link>
           </Button>
-          <Button color="inherit">Logout</Button>
+          <Button onClick={()=> auth.signOut()} color="inherit">Logout</Button>
         </Toolbar>
       </AppBar>
       <Box>{children}</Box>
