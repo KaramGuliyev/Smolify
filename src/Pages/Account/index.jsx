@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
+import React, { useCallback, useEffect, useState } from "react";
+import { Box, Button, CircularProgress, Grid, Snackbar, Typography } from "@mui/material";
 import LinkItem from "../../components/LinkItem";
 import Modal from "../../components/Modal";
 import { auth, firestore } from "../../firebase";
+import copy from "copy-to-clipboard";
 
 const Account = () => {
   const [links, setLinks] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [linkCopiedToastr, setLinkCopiedToastr] = useState(false);
 
   const fetchLinks = async () => {
     setLoading(true);
@@ -34,6 +36,11 @@ const Account = () => {
     }
   }, [isOpen]);
 
+  const handleCopyLink = useCallback((shortUrl) => {
+    copy(shortUrl);
+    setLinkCopiedToastr(true);
+  }, []);
+
   if (loading) {
     return (
       <Box mt={5} display="flex" justifyContent="center">
@@ -52,6 +59,12 @@ const Account = () => {
 
   return (
     <Box mt={5}>
+      <Snackbar
+        open={linkCopiedToastr}
+        onClose={() => setLinkCopiedToastr(false)}
+        autoHideDuration={2000}
+        message="Link is copied to clipboard!"
+      />
       {isOpen && <Modal setIsOpen={setIsOpen} fetchLinks={fetchLinks} />}
       <Grid container justifyContent="center">
         <Grid item xs={8}>
@@ -63,7 +76,7 @@ const Account = () => {
               </Button>
             </Box>
           </Box>
-          {links.length === 0 ? noLinks : <LinkItem LinkArray={links} setLinkArray={setLinks} />}
+          {links.length === 0 ? noLinks : <LinkItem copyLink={handleCopyLink} LinkArray={links} setLinkArray={setLinks} />}
         </Grid>
       </Grid>
     </Box>

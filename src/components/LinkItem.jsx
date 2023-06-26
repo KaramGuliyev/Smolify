@@ -5,7 +5,7 @@ import DateComponent from "./Date";
 import { auth, firestore } from "../firebase";
 import { memo } from "react";
 
-const LinkItem = ({ LinkArray, setLinkArray }) => {
+const LinkItem = ({ LinkArray, setLinkArray, copyLink }) => {
   const deleteLink = useCallback(
     async (linkDocId) => {
       await firestore.collection("users").doc(auth.currentUser.uid).collection("links").doc(linkDocId).delete();
@@ -20,6 +20,7 @@ const LinkItem = ({ LinkArray, setLinkArray }) => {
     <>
       {LinkArray.sort((prev, next) => next.createdAt - prev.createdAt).map((linkItem, i) => {
         const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
+        const shortUrl = window.location.host + "/" + shortCode;
         return (
           <Box key={i} mb={i === LinkArray.length - 1 ? 8 : 0}>
             <Box display="flex" justifyContent="space-between">
@@ -30,8 +31,8 @@ const LinkItem = ({ LinkArray, setLinkArray }) => {
                   <Typography>{longUrl}</Typography>
                 </Box>
                 <Box display="flex" gap={3} alignItems="center">
-                  <Typography color="primary">{window.location.host + "/" + shortCode}</Typography>
-                  <Button size="small" variant="outlined">
+                  <Typography color="primary">{shortUrl}</Typography>
+                  <Button onClick={() => copyLink(shortUrl)} size="small" variant="outlined">
                     Copy
                   </Button>
                   <Button onClick={() => deleteLink(id)} size="small" variant="contained" color="secondary">

@@ -16,6 +16,9 @@ export default createTheme({
       textTransform: "capitalize",
       fontWeight: 600,
     },
+    h3: {
+      fontWeight: 600,
+    },
     h4: {
       fontWeight: 600,
     },

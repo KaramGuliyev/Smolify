@@ -1,6 +1,6 @@
 // React
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 // Stylings
 import { ThemeProvider } from "@emotion/react";
@@ -15,10 +15,12 @@ import { auth } from "./firebase";
 import Home from "./Pages/LandingPage";
 import Account from "./Pages/Account";
 import NavBar from "./Layouts/NavBar";
+import LinkRedirect from "./Pages/LinkRedirect";
 
 const App = () => {
+  const { pathname } = useLocation();
   const [user, setUser] = useState(null);
-  const [initialLoad, setInitialLoad] = useState(true);
+  const [initialLoad, setInitialLoad] = useState(pathname === "/" || pathname === "/account" ? true : false);
 
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
@@ -37,14 +39,13 @@ const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Router>
-        <NavBar>
-          <Routes>
-            <Route path="/" element={user ? <Navigate to="/account" /> : <Home />} />
-            <Route path="/account" element={!user ? <Navigate to="/" /> : <Account />} />
-          </Routes>
-        </NavBar>
-      </Router>
+      <NavBar>
+        <Routes>
+          <Route exact path="/" element={user ? <Navigate to="/account" /> : <Home />} />
+          <Route path="/account" element={!user ? <Navigate to="/" /> : <Account />} />
+          <Route path="/:shortCode" Component={LinkRedirect} />
+        </Routes>
+      </NavBar>
     </ThemeProvider>
   );
 };

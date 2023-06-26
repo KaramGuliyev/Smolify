@@ -28,7 +28,7 @@ const Modal = ({ setIsOpen, fetchLink }) => {
   const handleSmolifyURL = async (name, longUrl) => {
     const link = {
       name,
-      longUrl,
+      longUrl: longUrl.includes("http://") || longUrl.includes("https://") ? longUrl : `http://${longUrl}`,
       createdAt: app.firestore.FieldValue.serverTimestamp(),
       shortCode: nanoid(5),
       totalClicks: 0,
