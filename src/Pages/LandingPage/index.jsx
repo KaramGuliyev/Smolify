@@ -1,30 +1,21 @@
-import { Button, Grid, Hidden, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import { SignUp, SignIn } from "../../firebase";
+import { Button, Grid, Hidden, Typography } from "@mui/material";
+
 import { Box } from "@mui/system";
+import AuthModal from "../../components/AuthModal";
+import { useState } from "react";
 
 const Home = () => {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const handleChange = (e) => setForm((oldForm) => ({ ...oldForm, [e.target.name]: e.target.value }));
-
-  const handleSignUp = () => {
-    const temp = SignUp(form.email, form.password);
-  };
-  const handleSignIn = () => {
-    const temp = SignIn(form.email, form.password);
-  };
-
+  const [openAuthModal, setOpenAuthModal] = useState(false);
   return (
     <Box display="flex" flexDirection="column" p={3} boxSizing="border-box" height="100vh" bgcolor="#56B7BA" color="#fff">
+      {openAuthModal && <AuthModal onClose={() => setOpenAuthModal(false)} />}
       <Box display="flex" alignContent="center" justifyContent="space-between">
         <Typography variant="h4">Smolify</Typography>
-        <Button color="inherit">Login / Sign Up</Button>
+        <Button onClick={() => setOpenAuthModal(true)} color="inherit">
+          Login / Sign Up
+        </Button>
       </Box>
-      <Box flexGrow={1} display="flex" alignItems="center">
+      <Box flexGrow={1} mx={5} display="flex" alignItems="center">
         <Grid container alignItems="center">
           <Grid item sm={6}>
             <Box>
@@ -39,7 +30,11 @@ const Home = () => {
           </Grid>
           <Hidden only="xs">
             <Grid item sm={6}>
-              <img style={{ width: "100%", borderRadius: "10px" }} src="/assets/mockup.png" alt="mockup" />
+              <img
+                style={{ width: "100%", borderRadius: "10px", boxShadow: "0 10px 25px rgba(0,0,0,0.1)" }}
+                src="/assets/mockup.png"
+                alt="mockup"
+              />
             </Grid>
           </Hidden>
         </Grid>
@@ -49,9 +44,3 @@ const Home = () => {
 };
 
 export default Home;
-
-// <Typography>Home</Typography>
-// <TextField value={form.email} name="email" onChange={handleChange} label="Email" />
-// <TextField value={form.password} type="password" name="password" onChange={handleChange} label="Password" />
-// <Button onClick={() => handleSignUp()}>Sign Up</Button>
-// <Button onClick={() => handleSignIn()}>Sign in</Button>
