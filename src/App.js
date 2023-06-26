@@ -25,7 +25,7 @@ const App = () => {
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       setUser(user);
-        setInitialLoad(false);
+      setInitialLoad(false);
     });
   }, []);
 

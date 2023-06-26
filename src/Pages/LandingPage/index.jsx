@@ -1,13 +1,14 @@
-import { Button, TextField, Typography } from "@mui/material";
+import { Button, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { SignUp, SignIn } from "../../firebase";
+import { Box } from "@mui/system";
 
 const Home = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
-  
+
   const handleChange = (e) => setForm((oldForm) => ({ ...oldForm, [e.target.name]: e.target.value }));
 
   const handleSignUp = () => {
@@ -18,14 +19,35 @@ const Home = () => {
   };
 
   return (
-    <>
-      <Typography>Home</Typography>
-      <TextField value={form.email} name="email" onChange={handleChange} label="Email" />
-      <TextField value={form.password} type="password" name="password" onChange={handleChange} label="Password" />
-      <Button onClick={() => handleSignUp()}>Sign Up</Button>
-      <Button onClick={() => handleSignIn()}>Sign in</Button>
-    </>
+    <Box display="flex" flexDirection="column" p={2} boxSizing="border-box" height="100vh" bgcolor="#56B7BA" color="#fff">
+      <Box display="flex" alignContent="center" justifyContent="space-between">
+        <Typography variant="h4">Smolify</Typography>
+        <Button color="inherit">Login / Sign Up</Button>
+      </Box>
+      <Box flexGrow={1} display="flex" alignItems="center">
+        <Grid container>
+          <Grid item sm={6}>
+            <Box>
+              <Typography variant="h3">No dirty links.</Typography>
+              <Box my={2}>
+                <Typography>Smolify it!</Typography>
+              </Box>
+              <Button size="large" variant="contained">
+                See how it works.
+              </Button>
+            </Box>
+          </Grid>
+          <Grid item sm={6}></Grid>
+        </Grid>
+      </Box>
+    </Box>
   );
 };
 
 export default Home;
+
+// <Typography>Home</Typography>
+// <TextField value={form.email} name="email" onChange={handleChange} label="Email" />
+// <TextField value={form.password} type="password" name="password" onChange={handleChange} label="Password" />
+// <Button onClick={() => handleSignUp()}>Sign Up</Button>
+// <Button onClick={() => handleSignIn()}>Sign in</Button>
