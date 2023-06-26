@@ -1,4 +1,4 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import { Button, Grid, Hidden, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { SignUp, SignIn } from "../../firebase";
 import { Box } from "@mui/system";
@@ -19,13 +19,13 @@ const Home = () => {
   };
 
   return (
-    <Box display="flex" flexDirection="column" p={2} boxSizing="border-box" height="100vh" bgcolor="#56B7BA" color="#fff">
+    <Box display="flex" flexDirection="column" p={3} boxSizing="border-box" height="100vh" bgcolor="#56B7BA" color="#fff">
       <Box display="flex" alignContent="center" justifyContent="space-between">
         <Typography variant="h4">Smolify</Typography>
         <Button color="inherit">Login / Sign Up</Button>
       </Box>
       <Box flexGrow={1} display="flex" alignItems="center">
-        <Grid container>
+        <Grid container alignItems="center">
           <Grid item sm={6}>
             <Box>
               <Typography variant="h3">No dirty links.</Typography>
@@ -37,7 +37,11 @@ const Home = () => {
               </Button>
             </Box>
           </Grid>
-          <Grid item sm={6}></Grid>
+          <Hidden only="xs">
+            <Grid item sm={6}>
+              <img style={{ width: "100%", borderRadius: "10px" }} src="/assets/mockup.png" alt="mockup" />
+            </Grid>
+          </Hidden>
         </Grid>
       </Box>
     </Box>
