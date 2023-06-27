@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,6 +15,7 @@ import { SignUp, SignIn } from "../firebase";
 import { Close } from "@mui/icons-material";
 
 const AuthModal = ({ onClose }) => {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isSignIn, setSignIn] = useState(true);
   const [form, setForm] = useState({
@@ -25,6 +27,7 @@ const AuthModal = ({ onClose }) => {
 
   const handleAuth = async () => {
     try {
+      setLoading(true);
       if (isSignIn) {
         const temp = await SignIn(form.email, form.password);
       } else {
@@ -56,6 +59,7 @@ const AuthModal = ({ onClose }) => {
           setError("An unknown error occurred.");
           break;
       }
+      setError(false)
     }
   };
 
@@ -78,6 +82,7 @@ const AuthModal = ({ onClose }) => {
           name="email"
           onChange={handleChange}
           label="Email"
+          disabled={loading}
         />
         <TextField
           variant="filled"
@@ -87,13 +92,14 @@ const AuthModal = ({ onClose }) => {
           name="password"
           onChange={handleChange}
           label="Password"
+          disabled={loading}
         />
         <Box color="red">
           <Typography>{error}</Typography>
         </Box>
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"} paddingTop={2}>
           <Button disableElevation fullWidth variant="contained" color="primary" onClick={() => handleAuth()}>
-            {isSignIn ? "Sign In" : "Sign Up"}
+            {loading ? <CircularProgress /> : isSignIn ? "Sign In" : "Sign Up"}
           </Button>
           <Typography paddingTop={2} onClick={() => setSignIn((prev) => !prev)}>
             {isSignIn ? "Don't have an account?" : "Have an account?"}
