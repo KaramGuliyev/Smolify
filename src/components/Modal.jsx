@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -25,26 +26,28 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
     longUrl: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
   const handleSmolifyURL = async (name, longUrl) => {
+    setLoading(true);
     const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
     const regex = new RegExp(expression);
-
     let errors = {};
-
     if (name.length < 3 || name.length > 15) {
       errors.name = "Name should be minimum 4 and maximum 15 char long.";
     }
-
     if (!regex.test(longUrl)) {
       errors.longUrl = "URL is not valid.";
     }
-    if (!!Object.keys(errors).length) return setErrors(errors);
-
+    setLoading(false);
+    if (!!Object.keys(errors).length) {
+      return setErrors(errors), setLoading(false);
+    }
     const link = {
       name,
       longUrl: longUrl.includes("http://") || longUrl.includes("https://") ? longUrl : `http://${longUrl}`,
@@ -79,6 +82,7 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
               fullWidth
               variant="outlined"
               label="Name"
+              disabled={loading}
             />
           </Box>
           <TextField
@@ -90,6 +94,7 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
             fullWidth
             variant="outlined"
             label="Website's Long Url"
+            disabled={loading}
           />
         </Box>
       </DialogContent>
@@ -100,8 +105,9 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
             variant="contained"
             color="primary"
             disableElevation
+            disabled={loading}
           >
-            Smolify URL
+            {loading ? <CircularProgress size={22} color={"inherit"} /> : "Smolify URL"}
           </Button>
         </Box>
       </DialogActions>

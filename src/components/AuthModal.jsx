@@ -59,7 +59,7 @@ const AuthModal = ({ onClose }) => {
           setError("An unknown error occurred.");
           break;
       }
-      setError(false)
+      setError(false);
     }
   };
 
@@ -99,7 +99,7 @@ const AuthModal = ({ onClose }) => {
         </Box>
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"} paddingTop={2}>
           <Button disableElevation fullWidth variant="contained" color="primary" onClick={() => handleAuth()}>
-            {loading ? <CircularProgress /> : isSignIn ? "Sign In" : "Sign Up"}
+            {loading ? <CircularProgress size={22} color={"inherit"} /> : isSignIn ? "Sign In" : "Sign Up"}
           </Button>
           <Typography paddingTop={2} onClick={() => setSignIn((prev) => !prev)}>
             {isSignIn ? "Don't have an account?" : "Have an account?"}
