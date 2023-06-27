@@ -30,12 +30,6 @@ const Account = () => {
     fetchLinks();
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) {
-      fetchLinks();
-    }
-  }, [isOpen]);
-
   const handleCopyLink = useCallback((shortUrl) => {
     copy(shortUrl);
     setLinkCopiedToastr(true);

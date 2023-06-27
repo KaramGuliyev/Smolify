@@ -14,7 +14,7 @@ import { Close } from "@mui/icons-material";
 import { nanoid } from "nanoid";
 import { app, firestore, auth } from "../firebase.js";
 
-const Modal = ({ setIsOpen, fetchLink }) => {
+const Modal = ({ setIsOpen, fetchLinks }) => {
   const [form, setForm] = useState({
     name: "",
     longUrl: "",
@@ -35,6 +35,7 @@ const Modal = ({ setIsOpen, fetchLink }) => {
     };
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
     setIsOpen(false);
+    fetchLinks()
   };
 
   return (
