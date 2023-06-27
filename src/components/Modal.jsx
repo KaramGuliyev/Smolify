@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -15,6 +15,11 @@ import { nanoid } from "nanoid";
 import { app, firestore, auth } from "../firebase.js";
 
 const Modal = ({ setIsOpen, fetchLinks }) => {
+  const [errors, setErrors] = useState({
+    name: "",
+    longUrl: "",
+  });
+
   const [form, setForm] = useState({
     name: "",
     longUrl: "",
@@ -26,6 +31,20 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
   };
 
   const handleSmolifyURL = async (name, longUrl) => {
+    const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    const regex = new RegExp(expression);
+
+    let errors = {};
+
+    if (name.length < 3 || name.length > 15) {
+      errors.name = "Name should be minimum 4 and maximum 15 char long.";
+    }
+
+    if (!regex.test(longUrl)) {
+      errors.longUrl = "URL is not valid.";
+    }
+    if (!!Object.keys(errors).length) return setErrors(errors);
+
     const link = {
       name,
       longUrl: longUrl.includes("http://") || longUrl.includes("https://") ? longUrl : `http://${longUrl}`,
@@ -35,7 +54,7 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
     };
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
     setIsOpen(false);
-    fetchLinks()
+    fetchLinks();
   };
 
   return (
@@ -51,9 +70,20 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
       <DialogContent>
         <Box display="flex" flexDirection="column">
           <Box my={3}>
-            <TextField value={form.name} name="name" onChange={handleChange} fullWidth variant="outlined" label="Name" />
+            <TextField
+              error={!!errors.name}
+              helperText={errors.name}
+              value={form.name}
+              name="name"
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              label="Name"
+            />
           </Box>
           <TextField
+            error={!!errors.longUrl}
+            helperText={errors.longUrl}
             value={form.longUrl}
             name="longUrl"
             onChange={handleChange}
