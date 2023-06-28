@@ -23,7 +23,7 @@ const Home = () => {
               <Box my={2}>
                 <Typography>Smolify it!</Typography>
               </Box>
-              <Button size="large" variant="contained">
+              <Button size="large" variant="contained" onClick={() => setOpenAuthModal(true)}>
                 See how it works.
               </Button>
             </Box>

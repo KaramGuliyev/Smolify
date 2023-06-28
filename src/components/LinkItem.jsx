@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Typography, Button, Box, Divider } from "@mui/material";
+import { Typography, Button, Box, Divider, Hidden } from "@mui/material";
 import { BarChart } from "@mui/icons-material";
 import DateComponent from "./Date";
 import { auth, firestore } from "../firebase";
@@ -23,12 +23,12 @@ const LinkItem = ({ LinkArray, setLinkArray, copyLink }) => {
         const shortUrl = window.location.host + "/" + shortCode;
         return (
           <Box key={i} mb={i === LinkArray.length - 1 ? 8 : 0}>
-            <Box display="flex" justifyContent="space-between">
-              <Box>
+            <Box display="flex" justifyContent="space-between" alignItems={"center"}>
+              <Box width={"50%"}>
                 <DateComponent dateDetails={createdAt} />
                 <Box my={2}>
                   <Typography variant="h5">{name}</Typography>
-                  <Typography>{longUrl}</Typography>
+                  <Typography style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{longUrl}</Typography>
                 </Box>
                 <Box display="flex" gap={3} alignItems="center">
                   <Typography color="primary">{shortUrl}</Typography>
@@ -46,9 +46,11 @@ const LinkItem = ({ LinkArray, setLinkArray, copyLink }) => {
                     <Typography>{totalClicks}</Typography>
                     <BarChart />
                   </Box>
-                  <Typography variant="overline" color="textSecondary">
-                    Total Clicks
-                  </Typography>
+                  <Hidden only={"xs"}>
+                    <Typography variant="overline" color="textSecondary">
+                      Total Clicks
+                    </Typography>
+                  </Hidden>
                 </Box>
               </Box>
             </Box>

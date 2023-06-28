@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,11 +15,18 @@ import { Close } from "@mui/icons-material";
 import { nanoid } from "nanoid";
 import { app, firestore, auth } from "../firebase.js";
 
-const Modal = ({ setIsOpen, fetchLink }) => {
+const Modal = ({ setIsOpen, fetchLinks }) => {
+  const [errors, setErrors] = useState({
+    name: "",
+    longUrl: "",
+  });
+
   const [form, setForm] = useState({
     name: "",
     longUrl: "",
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +34,20 @@ const Modal = ({ setIsOpen, fetchLink }) => {
   };
 
   const handleSmolifyURL = async (name, longUrl) => {
+    setLoading(true);
+    const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+    const regex = new RegExp(expression);
+    let errors = {};
+    if (name.length < 3 || name.length > 15) {
+      errors.name = "Name should be minimum 4 and maximum 15 char long.";
+    }
+    if (!regex.test(longUrl)) {
+      errors.longUrl = "URL is not valid.";
+    }
+    setLoading(false);
+    if (!!Object.keys(errors).length) {
+      return setErrors(errors), setLoading(false);
+    }
     const link = {
       name,
       longUrl: longUrl.includes("http://") || longUrl.includes("https://") ? longUrl : `http://${longUrl}`,
@@ -35,6 +57,7 @@ const Modal = ({ setIsOpen, fetchLink }) => {
     };
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
     setIsOpen(false);
+    fetchLinks();
   };
 
   return (
@@ -50,15 +73,28 @@ const Modal = ({ setIsOpen, fetchLink }) => {
       <DialogContent>
         <Box display="flex" flexDirection="column">
           <Box my={3}>
-            <TextField value={form.name} name="name" onChange={handleChange} fullWidth variant="outlined" label="Name" />
+            <TextField
+              error={!!errors.name}
+              helperText={errors.name}
+              value={form.name}
+              name="name"
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+              label="Name"
+              disabled={loading}
+            />
           </Box>
           <TextField
+            error={!!errors.longUrl}
+            helperText={errors.longUrl}
             value={form.longUrl}
             name="longUrl"
             onChange={handleChange}
             fullWidth
             variant="outlined"
             label="Website's Long Url"
+            disabled={loading}
           />
         </Box>
       </DialogContent>
@@ -69,8 +105,9 @@ const Modal = ({ setIsOpen, fetchLink }) => {
             variant="contained"
             color="primary"
             disableElevation
+            disabled={loading}
           >
-            Smolify URL
+            {loading ? <CircularProgress size={22} color={"inherit"} /> : "Smolify URL"}
           </Button>
         </Box>
       </DialogActions>

@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -14,6 +15,8 @@ import { SignUp, SignIn } from "../firebase";
 import { Close } from "@mui/icons-material";
 
 const AuthModal = ({ onClose }) => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [isSignIn, setSignIn] = useState(true);
   const [form, setForm] = useState({
     email: "",
@@ -22,11 +25,41 @@ const AuthModal = ({ onClose }) => {
 
   const handleChange = (e) => setForm((oldForm) => ({ ...oldForm, [e.target.name]: e.target.value }));
 
-  const handleAuth = () => {
-    if (isSignIn) {
-      const temp = SignIn(form.email, form.password);
-    } else {
-      const temp = SignUp(form.email, form.password);
+  const handleAuth = async () => {
+    try {
+      setLoading(true);
+      if (isSignIn) {
+        const temp = await SignIn(form.email, form.password);
+      } else {
+        const temp = await SignUp(form.email, form.password);
+      }
+    } catch (err) {
+      switch (err.code) {
+        case "auth/user-not-found":
+          setError("User not found. Please check your credentials and try again.");
+          break;
+        case "auth/email-already-in-use":
+          setError("There is already an account with this email address.");
+          break;
+        case "auth/invalid-email":
+          setError("Invalid email address.");
+          break;
+        case "auth/operation-not-allowed":
+          setError(
+            "Email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab."
+          );
+          break;
+        case "auth/weak-password":
+          setError("Weak password. Choose a stronger password.");
+          break;
+        case "auth/wrong-password":
+          setError("The password is incorrect.");
+          break;
+        default:
+          setError("An unknown error occurred.");
+          break;
+      }
+      setError(false);
     }
   };
 
@@ -49,6 +82,7 @@ const AuthModal = ({ onClose }) => {
           name="email"
           onChange={handleChange}
           label="Email"
+          disabled={loading}
         />
         <TextField
           variant="filled"
@@ -58,10 +92,14 @@ const AuthModal = ({ onClose }) => {
           name="password"
           onChange={handleChange}
           label="Password"
+          disabled={loading}
         />
+        <Box color="red">
+          <Typography>{error}</Typography>
+        </Box>
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"} paddingTop={2}>
           <Button disableElevation fullWidth variant="contained" color="primary" onClick={() => handleAuth()}>
-            {isSignIn ? "Sign In" : "Sign Up"}
+            {loading ? <CircularProgress size={22} color={"inherit"} /> : isSignIn ? "Sign In" : "Sign Up"}
           </Button>
           <Typography paddingTop={2} onClick={() => setSignIn((prev) => !prev)}>
             {isSignIn ? "Don't have an account?" : "Have an account?"}

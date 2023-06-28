@@ -30,12 +30,6 @@ const Account = () => {
     fetchLinks();
   }, []);
 
-  useEffect(() => {
-    if (!isOpen) {
-      fetchLinks();
-    }
-  }, [isOpen]);
-
   const handleCopyLink = useCallback((shortUrl) => {
     copy(shortUrl);
     setLinkCopiedToastr(true);
@@ -58,7 +52,7 @@ const Account = () => {
   );
 
   return (
-    <Box mt={5}>
+    <Box mt={{ xs: 3, md: 5 }} p={{ xs: 2, sm: 0 }}>
       <Snackbar
         open={linkCopiedToastr}
         onClose={() => setLinkCopiedToastr(false)}
@@ -67,7 +61,7 @@ const Account = () => {
       />
       {isOpen && <Modal setIsOpen={setIsOpen} fetchLinks={fetchLinks} />}
       <Grid container justifyContent="center">
-        <Grid item xs={8}>
+        <Grid item xs={12} sm={8}>
           <Box display="flex" mb={5} alignItems="center">
             <Typography variant="h4">My Links</Typography>
             <Box ml={3}>
