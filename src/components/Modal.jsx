@@ -44,7 +44,6 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
     if (!regex.test(longUrl)) {
       errors.longUrl = "URL is not valid.";
     }
-    setLoading(false);
     if (!!Object.keys(errors).length) {
       return setErrors(errors), setLoading(false);
     }
@@ -56,8 +55,8 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
       totalClicks: 0,
     };
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
-    setIsOpen(false);
-    fetchLinks();
+      setIsOpen(false);
+      fetchLinks();
   };
 
   return (

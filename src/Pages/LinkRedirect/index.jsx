@@ -9,19 +9,26 @@ const LinkRedirect = () => {
 
   useEffect(() => {
     const fetchLinksDoc = async () => {
-      const linkDoc = await firestore.collection("links").doc(shortCode).get();
-      const { longUrl, linkID, userUid } = linkDoc.data();
-      setTimeout(() => {
+      try {
+        const linkDoc = await firestore.collection("links").doc(shortCode).get();
+        const { userUid, linkID, longUrl } = linkDoc.data();
         if (linkDoc.exists) {
-          firestore.collection('users').doc(userUid).collection("links").doc(linkID).update({
-            totalClicks : app.firestore.FieldValue.increment(1)
-          })
-          window.location.href = longUrl;
-        } else {
-          setLoading(false);
+          firestore
+            .collection("users")
+            .doc(userUid)
+            .collection("links")
+            .doc(linkID)
+            .update({
+              totalClicks: app.firestore.FieldValue.increment(1),
+            });
           window.location.href = longUrl;
         }
-      }, 2000);
+      } catch {
+        setLoading(false);
+        setTimeout(() => {
+          window.location.href = window.location.origin;
+        }, 3000);
+      }
     };
     fetchLinksDoc();
   }, []);
@@ -30,17 +37,17 @@ const LinkRedirect = () => {
     return (
       <Box mt={10} textAlign="center">
         <CircularProgress />
-        <Typography>Redirecting...</Typography>
+        <Typography mt={5}>Redirecting...</Typography>
       </Box>
     );
   } else
     return (
       <Box mt={10} textAlign="center">
-        <Typography variant="h3">Link is invalid</Typography>
-        <Typography mt={5}>Redirecting to Home Page</Typography>
         <Box mt={3}>
           <CircularProgress />
         </Box>
+        <Typography variant="h3" mt={5}>Link is invalid</Typography>
+        <Typography mt={5}>Redirecting to Home Page</Typography>
       </Box>
     );
 };
