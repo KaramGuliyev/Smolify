@@ -13,11 +13,11 @@ admin.initializeApp();
 
 exports.linkCreated = functions.firestore.document("users/{userUid}/links/{linkID}").onCreate((snapshot, context) => {
   const { userUid, linkID } = context.params;
-  const { longUrl, shortCode } = snapshot.data();
+  const { longURL, shortCode } = snapshot.data();
   return admin.firestore().doc(`links/${shortCode}/`).set({
     userUid,
     linkID,
-    longUrl,
+    longURL,
   });
 });
 

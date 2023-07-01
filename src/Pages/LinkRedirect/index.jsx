@@ -11,7 +11,7 @@ const LinkRedirect = () => {
     const fetchLinksDoc = async () => {
       try {
         const linkDoc = await firestore.collection("links").doc(shortCode).get();
-        const { userUid, linkID, longUrl } = linkDoc.data();
+        const { userUid, linkID, longURL } = linkDoc.data();
         if (linkDoc.exists) {
           firestore
             .collection("users")
@@ -21,7 +21,7 @@ const LinkRedirect = () => {
             .update({
               totalClicks: app.firestore.FieldValue.increment(1),
             });
-          window.location.href = longUrl;
+          window.location.href = longURL;
         }
       } catch {
         setLoading(false);
