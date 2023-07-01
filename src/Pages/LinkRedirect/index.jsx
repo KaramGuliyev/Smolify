@@ -11,11 +11,11 @@ const LinkRedirect = () => {
     const fetchLinksDoc = async () => {
       try {
         const linkDoc = await firestore.collection("links").doc(shortCode).get();
-        const { userUid, linkID, longURL } = linkDoc.data();
+        const { userUID, linkID, longURL } = linkDoc.data();
         if (linkDoc.exists) {
           firestore
             .collection("users")
-            .doc(userUid)
+            .doc(userUID)
             .collection("links")
             .doc(linkID)
             .update({
