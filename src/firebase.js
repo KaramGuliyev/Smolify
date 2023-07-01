@@ -26,11 +26,6 @@ async function SignUp(email, password) {
     .then((userCredential) => {
       const user = userCredential.user;
     })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode + errorMessage);
-    });
 }
 
 async function SignIn(email, password) {

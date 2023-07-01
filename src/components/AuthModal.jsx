@@ -28,40 +28,41 @@ const AuthModal = ({ onClose }) => {
   const handleAuth = async () => {
     try {
       setLoading(true);
-      if (isSignIn) {
-        const temp = await SignIn(form.email, form.password);
-      } else {
-        const temp = await SignUp(form.email, form.password);
-      }
+      const authFunc = isSignIn ? SignIn : SignUp;
+      const result = await authFunc(form.email, form.password);
+      
     } catch (err) {
+      let errorMessage;
+  
       switch (err.code) {
         case "auth/user-not-found":
-          setError("User not found. Please check your credentials and try again.");
+          errorMessage = "User not found. Please check your credentials and try again.";
           break;
         case "auth/email-already-in-use":
-          setError("There is already an account with this email address.");
+          errorMessage = "There is already an account with this email address.";
           break;
         case "auth/invalid-email":
-          setError("Invalid email address.");
+          errorMessage = "Invalid email address.";
           break;
         case "auth/operation-not-allowed":
-          setError(
-            "Email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab."
-          );
+          errorMessage = "Email/password accounts are not enabled. Enable email/password accounts in the Firebase Console, under the Auth tab.";
           break;
         case "auth/weak-password":
-          setError("Weak password. Choose a stronger password.");
+          errorMessage = "Weak password. Choose a stronger password.";
           break;
         case "auth/wrong-password":
-          setError("The password is incorrect.");
+          errorMessage = "The password is incorrect.";
           break;
         default:
-          setError("An unknown error occurred.");
+          errorMessage = "An unknown error occurred.";
           break;
       }
-      setError(false);
+  
+      setError(errorMessage);
+      setLoading(false);
     }
   };
+  
 
   return (
     <Dialog fullWidth open onClose={onClose}>
@@ -94,7 +95,7 @@ const AuthModal = ({ onClose }) => {
           label="Password"
           disabled={loading}
         />
-        <Box color="red">
+        <Box color="red" mt={1}>
           <Typography>{error}</Typography>
         </Box>
         <Box display={"flex"} flexDirection={"column"} alignItems={"center"} paddingTop={2}>
