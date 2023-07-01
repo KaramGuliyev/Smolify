@@ -18,12 +18,12 @@ import { app, firestore, auth } from "../firebase.js";
 const Modal = ({ setIsOpen, fetchLinks }) => {
   const [errors, setErrors] = useState({
     name: "",
-    longUrl: "",
+    longURL: "",
   });
 
   const [form, setForm] = useState({
     name: "",
-    longUrl: "",
+    longURL: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSmolifyURL = async (name, longUrl) => {
+  const handleSmolifyURL = async (name, longURL) => {
     setLoading(true);
     const expression = /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
     const regex = new RegExp(expression);
@@ -41,23 +41,22 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
     if (name.length < 3 || name.length > 15) {
       errors.name = "Name should be minimum 4 and maximum 15 char long.";
     }
-    if (!regex.test(longUrl)) {
-      errors.longUrl = "URL is not valid.";
+    if (!regex.test(longURL)) {
+      errors.longURL = "URL is not valid.";
     }
-    setLoading(false);
     if (!!Object.keys(errors).length) {
       return setErrors(errors), setLoading(false);
     }
     const link = {
       name,
-      longUrl: longUrl.includes("http://") || longUrl.includes("https://") ? longUrl : `http://${longUrl}`,
+      longURL: longURL.includes("http://") || longURL.includes("https://") ? longURL : `http://${longURL}`,
       createdAt: app.firestore.FieldValue.serverTimestamp(),
       shortCode: nanoid(5),
       totalClicks: 0,
     };
     const res = await firestore.collection("users").doc(auth.currentUser.uid).collection("links").add(link);
-    setIsOpen(false);
-    fetchLinks();
+      setIsOpen(false);
+      fetchLinks();
   };
 
   return (
@@ -86,10 +85,10 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
             />
           </Box>
           <TextField
-            error={!!errors.longUrl}
-            helperText={errors.longUrl}
-            value={form.longUrl}
-            name="longUrl"
+            error={!!errors.longURL}
+            helperText={errors.longURL}
+            value={form.longURL}
+            name="longURL"
             onChange={handleChange}
             fullWidth
             variant="outlined"
@@ -101,7 +100,7 @@ const Modal = ({ setIsOpen, fetchLinks }) => {
       <DialogActions>
         <Box mr={2} mb={2}>
           <Button
-            onClick={() => handleSmolifyURL(form.name, form.longUrl)}
+            onClick={() => handleSmolifyURL(form.name, form.longURL)}
             variant="contained"
             color="primary"
             disableElevation

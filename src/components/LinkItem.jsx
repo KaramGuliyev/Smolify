@@ -19,7 +19,7 @@ const LinkItem = ({ LinkArray, setLinkArray, copyLink }) => {
   return (
     <>
       {LinkArray.sort((prev, next) => next.createdAt - prev.createdAt).map((linkItem, i) => {
-        const { id, createdAt, name, longUrl, shortCode, totalClicks } = linkItem;
+        const { id, createdAt, name, longURL, shortCode, totalClicks } = linkItem;
         const shortUrl = window.location.host + "/" + shortCode;
         return (
           <Box key={i} mb={i === LinkArray.length - 1 ? 8 : 0}>
@@ -28,7 +28,7 @@ const LinkItem = ({ LinkArray, setLinkArray, copyLink }) => {
                 <DateComponent dateDetails={createdAt} />
                 <Box my={2}>
                   <Typography variant="h5">{name}</Typography>
-                  <Typography style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{longUrl}</Typography>
+                  <Typography style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{longURL}</Typography>
                 </Box>
                 <Box display="flex" gap={3} alignItems="center">
                   <Typography color="primary">{shortUrl}</Typography>
